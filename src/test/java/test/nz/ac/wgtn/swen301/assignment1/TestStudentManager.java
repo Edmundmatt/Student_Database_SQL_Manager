@@ -1,6 +1,7 @@
 package test.nz.ac.wgtn.swen301.assignment1;
 
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
+import nz.ac.wgtn.swen301.studentdb.Degree;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Assert;
@@ -31,4 +32,10 @@ public class TestStudentManager {
 //        Student student = new StudentManager().readStudent("id42");
 //        Assert.assertEquals(student.getId(),"id42");
 //    }
+
+    @Test
+    public void test_readDegree1() throws Exception {
+        Degree degree = new StudentManager().readDegree("id42");
+        assertNotNull(degree);
+    }
 }

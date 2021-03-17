@@ -28,23 +28,14 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student readStudent(String id) throws NoSuchRecordException, ClassNotFoundException, SQLException {
-
-        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        String url = "jdbc:derby:memory:studentdb";
-        Connection conn = DriverManager.getConnection(url);
-        Statement stmt = conn.createStatement();
-
-        String sqlStatement = "SELECT * FROM STUDENTS WHERE id=\'" + id + "\'";
-
-        ResultSet results = stmt.executeQuery(sqlStatement);
-
-        Student s = new Student();
+        ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
+        Student student = new Student();
         while(results.next()){
-            s.setName(results.getString("name"));
-            s.setFirstName(results.getString("first_name"));
-//            s.setDegree(results.getString("degree"));
+            student.setName(results.getString("name"));
+            student.setFirstName(results.getString("first_name"));
+//            student.setDegree(results.getString("degree"));
         }
-        return s;
+        return student;
     }
 
     /**
@@ -55,8 +46,28 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
-    public static Degree readDegree(String id) throws NoSuchRecordException {
-        return null;
+    public static Degree readDegree(String id) throws NoSuchRecordException, SQLException, ClassNotFoundException {
+        ResultSet results = connectToDataBase("SELECT * FROM DEGREES WHERE id=\'" + id + "\'");
+        Degree degree = new Degree();
+        while(results.next()){
+            degree.setName(results.getString("DEGREE_NAMES"));
+        }
+        return degree;
+    }
+
+    /**
+     * Returns ResultSet from the database given a an input String sqlStatement.
+     * @param sqlStatement
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public static ResultSet connectToDataBase(String sqlStatement) throws SQLException, ClassNotFoundException {
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        String url = "jdbc:derby:memory:studentdb";
+        Connection conn = DriverManager.getConnection(url);
+        Statement stmt = conn.createStatement();
+        return stmt.executeQuery(sqlStatement);
     }
 
     /**

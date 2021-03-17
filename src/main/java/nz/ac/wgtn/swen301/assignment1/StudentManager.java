@@ -27,9 +27,24 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student readStudent(String id) throws NoSuchRecordException {
-        return null;
-        //This is a comment to test the git commit has worked
+    public static Student readStudent(String id) throws NoSuchRecordException, ClassNotFoundException, SQLException {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        String url = "jdbc:derby:memory:studentdb";
+        Connection conn = DriverManager.getConnection(url);
+        Statement stmt = conn.createStatement();
+
+        String sqlStatement = "SELECT * FROM STUDENTS WHERE id=\'" + id + "\'";
+
+        ResultSet results = stmt.executeQuery(sqlStatement);
+
+        Student s = new Student();
+        while(results.next()){
+            s.setName(results.getString("name"));
+            s.setFirstName(results.getString("first_name"));
+//            s.setDegree(results.getString("degree"));
+        }
+        return s;
     }
 
     /**

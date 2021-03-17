@@ -3,6 +3,7 @@ package test.nz.ac.wgtn.swen301.assignment1;
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
@@ -24,4 +25,10 @@ public class TestStudentManager {
         // THIS WILL INITIALLY FAIL !!
         assertNotNull(student);
     }
+
+//    @Test
+//    public void test_readStudent1() throws Exception {
+//        Student student = new StudentManager().readStudent("id42");
+//        Assert.assertEquals(student.getId(),"id42");
+//    }
 }

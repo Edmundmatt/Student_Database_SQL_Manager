@@ -69,8 +69,8 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_delete
      */
     public static void delete(Student student) throws NoSuchRecordException {
-
-
+        String sqlStatement = "DELETE FROM STUDENTS WHERE id = \'" + student.getId() + "\'";
+        updateDataBase(sqlStatement);
     }
 
     /**
@@ -85,7 +85,7 @@ public class StudentManager {
      */
     public static void update(Student student) throws NoSuchRecordException {
         String sqlStatement = "UPDATE STUDENTS " +
-                "SET name  = \'" + student.getName() + "\', firstName = \'" + student.getFirstName() + "\', degree = \'" + student.getDegree() + "\'" +
+                "SET name  = \'" + student.getName() + "\', firstName = \'" + student.getFirstName() + "\', degree = \'" + student.getDegree().getId() + "\'" +
                 " WHERE id = \'" + student.getId() + "\'";
         updateDataBase(sqlStatement);
     }
@@ -103,13 +103,13 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_createStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student createStudent(String name,String firstName,Degree degree) throws SQLException, ClassNotFoundException {
-        String id = ""; //Create means of making new valid IDs
-        Student student = new Student(id, name, firstName, degree);
-        if(getAllStudentIds().contains(id)) {
-            //Id is already being used by another student in the database
-        }
+        List<String> allIDs = (List<String>) getAllStudentIds();
+        int lastID = Integer.valueOf(allIDs.get(allIDs.size()-1).substring(2));
+        int newIDInt = lastID++;
+        String newID = "id" + newIDInt;
+        Student student = new Student(newID, name, firstName, degree);
         String sqlStatement = "INSERT INTO STUDENTS "
-                + "VALUES (\'" + id + "\', \'" + name + "\', \'" + firstName + "\', \"" + degree + "\')";
+                + "VALUES (\'" + newID + "\', \'" + name + "\', \'" + firstName + "\', \"" + degree + "\')";
         updateDataBase(sqlStatement);
         return student;
     }
@@ -149,7 +149,7 @@ public class StudentManager {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public static ResultSet connectToDataBase(String sqlStatement) throws SQLException, ClassNotFoundException {
+    private static ResultSet connectToDataBase(String sqlStatement) throws SQLException, ClassNotFoundException {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             String url = "jdbc:derby:memory:studentdb";
@@ -163,7 +163,7 @@ public class StudentManager {
         }
     }
 
-    public static void updateDataBase(String sqlStatement){
+    private static void updateDataBase(String sqlStatement){
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             String url = "jdbc:derby:memory:studentdb";

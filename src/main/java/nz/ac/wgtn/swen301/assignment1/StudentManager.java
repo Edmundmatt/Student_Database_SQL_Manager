@@ -68,7 +68,10 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_delete
      */
-    public static void delete(Student student) throws NoSuchRecordException {}
+    public static void delete(Student student) throws NoSuchRecordException {
+
+
+    }
 
     /**
      * Update (synchronize) a student instance with the database.
@@ -81,7 +84,10 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_update (followed by optional numbers if multiple tests are used)
      */
     public static void update(Student student) throws NoSuchRecordException {
-
+        String sqlStatement = "UPDATE STUDENTS " +
+                "SET name  = \'" + student.getName() + "\', firstName = \'" + student.getFirstName() + "\', degree = \'" + student.getDegree() + "\'" +
+                " WHERE id = \'" + student.getId() + "\'";
+        updateDataBase(sqlStatement);
     }
 
 
@@ -102,7 +108,8 @@ public class StudentManager {
         if(getAllStudentIds().contains(id)) {
             //Id is already being used by another student in the database
         }
-        String sqlStatement = "INSERT INTO STUDENTS " + "VALUES (\'" + id + "\', \'" + name + "\', \'" + firstName + "\', \"" + degree + "\')";
+        String sqlStatement = "INSERT INTO STUDENTS "
+                + "VALUES (\'" + id + "\', \'" + name + "\', \'" + firstName + "\', \"" + degree + "\')";
         updateDataBase(sqlStatement);
         return student;
     }
@@ -113,7 +120,7 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllStudentIds (followed by optional numbers if multiple tests are used)
      */
     public static Collection<String> getAllStudentIds() throws SQLException, ClassNotFoundException {
-        List<String> studentIDs = new ArrayList<>();
+        List<String> studentIDs = new ArrayList<>(); //Change to an Iterable
         ResultSet results = connectToDataBase("SELECT id FROM STUDENTS");
         while(results.next()){
              studentIDs.add(results.getString("id"));
@@ -127,7 +134,7 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllDegreeIds (followed by optional numbers if multiple tests are used)
      */
     public static Iterable<String> getAllDegreeIds() throws SQLException, ClassNotFoundException {
-        List<String> degreeIDs = new ArrayList<>();
+        List<String> degreeIDs = new ArrayList<>(); //Change to Iterable
         ResultSet results = connectToDataBase("SELECT id FROM DEGREES");
         while(results.next()){
             degreeIDs.add(results.getString("id"));

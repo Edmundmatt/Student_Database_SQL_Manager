@@ -30,17 +30,22 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student readStudent(String id) throws NoSuchRecordException, ClassNotFoundException, SQLException {
-        ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
-        Student student = new Student();
-        Degree degree = new Degree();
-        while(results.next()){
-            student.setName(results.getString("name"));
-            student.setFirstName(results.getString("first_name"));
-            degree.setName(results.getString("degree"));
-            student.setDegree(degree);
+        try {
+            ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
+            Student student = null;
+            Degree degree = null;
 
+            while (results.next()) {
+                degree = readDegree(results.getString("degree"));
+                student = new Student(id, results.getString("name"), results.getString("first_name"),
+                        degree);
+            }
+            return student;
+        }catch(NoSuchRecordException e){
+            System.err.println("Error: readStudent()");
+            e.printStackTrace();
+            return null;
         }
-        return student;
     }
 
     /**
@@ -52,12 +57,19 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
     public static Degree readDegree(String id) throws NoSuchRecordException, SQLException, ClassNotFoundException {
-        ResultSet results = connectToDataBase("SELECT * FROM DEGREES WHERE id=\'" + id + "\'");
-        Degree degree = new Degree();
-        while(results.next()){
-            degree.setName(results.getString("DEGREE_NAMES"));
+        try {
+            ResultSet results = connectToDataBase("SELECT * FROM DEGREES WHERE id=\'" + id + "\'");
+            Degree degree = new Degree();
+            while (results.next()) {
+                degree = new Degree(id, results.getString("name"));
+            }
+            if(degree == null) throw new NoSuchRecordException("Error: readDegree() - Degree null value");
+            return degree;
+        }catch(Exception e){
+            System.err.println("Error: readDegree()");
+            e.printStackTrace();
+            return null;
         }
-        return degree;
     }
 
 
@@ -104,6 +116,10 @@ public class StudentManager {
      */
     public static Student createStudent(String name,String firstName,Degree degree) throws SQLException, ClassNotFoundException {
         List<String> allIDs = (List<String>) getAllStudentIds();
+        if(allIDs.size() > 10000){
+            System.out.println("No space in database for new student");
+            return null;
+        }
         int lastID = Integer.valueOf(allIDs.get(allIDs.size()-1).substring(2));
         int newIDInt = lastID++;
         String newID = "id" + newIDInt;
@@ -171,7 +187,7 @@ public class StudentManager {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sqlStatement);
         }catch(Exception e){
-            System.err.println("Error: updateDataBase");
+            System.err.println("Error: updateDataBase()");
             e.printStackTrace();
         }
     }

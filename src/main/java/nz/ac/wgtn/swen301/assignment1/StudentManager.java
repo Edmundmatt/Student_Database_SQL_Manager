@@ -97,7 +97,7 @@ public class StudentManager {
      */
     public static void update(Student student) throws NoSuchRecordException {
         String sqlStatement = "UPDATE STUDENTS " +
-                "SET name  = \'" + student.getName() + "\', firstName = \'" + student.getFirstName() + "\', degree = \'" + student.getDegree().getId() + "\'" +
+                "SET name  = \'" + student.getName() + "\', first_name = \'" + student.getFirstName() + "\', degree = \'" + student.getDegree().getId() + "\'" +
                 " WHERE id = \'" + student.getId() + "\'";
         updateDataBase(sqlStatement);
     }
@@ -116,7 +116,7 @@ public class StudentManager {
      */
     public static Student createStudent(String name,String firstName,Degree degree) throws SQLException, ClassNotFoundException {
         List<String> allIDs = (List<String>) getAllStudentIds();
-        if(allIDs.size() > 10000){
+        if(allIDs.size() >= 10000){
             System.out.println("No space in database for new student");
             return null;
         }

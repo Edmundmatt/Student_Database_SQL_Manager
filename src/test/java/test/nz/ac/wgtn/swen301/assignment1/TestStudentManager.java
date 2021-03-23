@@ -42,6 +42,27 @@ public class TestStudentManager {
     }
 
     @Test
+    public void test_readDegree2() throws Exception {
+        Degree expected = new Degree("deg2", "BE Cybersecurity");
+        Degree degree = new StudentManager().readDegree("deg2");
+        assertTrue(degree.equals(expected));
+    }
+
+    @Test
+    public void test_createStudent1() throws Exception {
+        //Assert student cannot be created when none have been deleted, no room in database
+        StudentManager sM = new StudentManager();
+        Degree degree = new Degree("deg0", "BSc Computer Science");
+        assertNull(sM.createStudent("","", degree));
+    }
+
+    @Test
+    public void test_createStudent2() throws Exception {
+        //Assert once a student has been deleted a new student can be added to the database
+        //
+    }
+
+    @Test
     public void test_delete1() throws Exception {
         StudentManager sM = new StudentManager();
 //        Degree degree = new Degree("id0", "BSc Computer Science");
@@ -54,12 +75,28 @@ public class TestStudentManager {
     }
 
     @Test
-    public void test_update() throws Exception {
-//        StudentManager sM = new StudentManager();
-//        Student student1 = new Student("id0", "", "", null);
-//        sM.update(student1);
-//        Student student2 = sM.readStudent("id0");
-//        assertTrue(student1.equals(student2));
+    public void test_update1() throws Exception {
+        StudentManager sM = new StudentManager();
+        Degree degree = new Degree("deg2", "BE Cybersecurity");
+        Student student1 = new Student("id0", "", "", degree);
+        sM.update(student1);
+        Student student2 = sM.readStudent("id0");
+        assertTrue(student1.equals(student2));
+
+    }
+
+    @Test
+    public void test_update2() throws Exception {
+        //Update doesn't work inputting null values
+        //Does it need to?
+
+    }
+
+
+
+    @Test
+    public void testPerformance() throws Exception {
+        //Expected the database manager can handle 1000 random read requests per second
 
     }
 }

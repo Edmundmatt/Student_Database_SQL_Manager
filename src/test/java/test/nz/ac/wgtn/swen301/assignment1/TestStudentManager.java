@@ -7,6 +7,8 @@ import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 
@@ -97,6 +99,16 @@ public class TestStudentManager {
     @Test
     public void testPerformance() throws Exception {
         //Expected the database manager can handle 1000 random read requests per second
-
+        StudentManager sM = new StudentManager();
+        String id;
+        Random random = new Random();
+        int j;
+        long start = System.currentTimeMillis();
+        for(int i = 0; i < 1000; i++){
+            j = random.nextInt(10000);
+            id = "id" + j;
+            sM.readStudent(id);
+        }
+        System.out.println(System.currentTimeMillis() - start);
     }
 }

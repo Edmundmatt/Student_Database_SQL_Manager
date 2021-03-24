@@ -29,23 +29,19 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student readStudent(String id) throws NoSuchRecordException, ClassNotFoundException, SQLException {
-        try {
-            ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
-            Student student = null;
-            Degree degree = null;
+    public static Student readStudent(String id) throws NoSuchRecordException,ClassNotFoundException, SQLException {
 
-            while (results.next()) {
-                degree = readDegree(results.getString("degree"));
-                student = new Student(id, results.getString("name"), results.getString("first_name"),
-                        degree);
-            }
-            return student;
-        }catch(NoSuchRecordException e){
-            System.err.println("Error: readStudent()");
-            e.printStackTrace();
-            return null;
+        ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
+        Student student = null;
+        Degree degree = null;
+        while (results.next()) {
+            degree = new Degree();
+            degree.setName(results.getString("degree"));
+            student = new Student(id, results.getString("name"), results.getString("first_name"),
+                    degree);
         }
+        System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" + degree.getName());
+        return student;
     }
 
     /**
@@ -156,6 +152,13 @@ public class StudentManager {
             degreeIDs.add(results.getString("id"));
         }
         return degreeIDs;
+    }
+
+    /**
+     * Custom method to be called by a test to test the performance of 1000 read requests.
+     */
+    public static void testingPerformance() throws SQLException, ClassNotFoundException{
+
     }
 
     /**

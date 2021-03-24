@@ -31,17 +31,42 @@ public class StudentManager {
      */
     public static Student readStudent(String id) throws NoSuchRecordException,ClassNotFoundException, SQLException {
 
-        ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
-        Student student = null;
-        Degree degree = null;
-        while (results.next()) {
-            degree = new Degree();
-            degree.setName(results.getString("degree"));
-            student = new Student(id, results.getString("name"), results.getString("first_name"),
-                    degree);
+//        ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
+//        Student student = null;
+//        Degree degree = null;
+//        while (results.next()) {
+//            degree = new Degree();
+//            degree.setName(results.getString("degree"));
+//            student = new Student(id, results.getString("name"), results.getString("first_name"),
+//                    degree);
+//        }
+//        System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" + degree.getName());
+//        return student;
+
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            String url = "jdbc:derby:memory:studentdb";
+            Connection conn = DriverManager.getConnection(url);
+            String sql = "SELECT * FROM STUDENTS WHERE id= ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet results = stmt.executeQuery();
+            Student student = null;
+            Degree degree = null;
+            while (results.next()) {
+                degree = new Degree();
+                degree.setName(results.getString("degree"));
+                student = new Student(id, results.getString("name"), results.getString("first_name"),
+                        degree);
+            }
+            System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" + degree.getName());
+            return student;
+        }catch(Exception e){
+            System.err.println("Error: connectToDataBase()");
+            e.printStackTrace();
+            return null;
         }
-        System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" + degree.getName());
-        return student;
+
     }
 
     /**
@@ -168,7 +193,7 @@ public class StudentManager {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private static ResultSet connectToDataBase(String sqlStatement) throws SQLException, ClassNotFoundException {
+    private static ResultSet connectToDataBase(String sqlStatement) throws ClassNotFoundException {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             String url = "jdbc:derby:memory:studentdb";

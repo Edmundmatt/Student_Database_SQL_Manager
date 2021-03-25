@@ -18,6 +18,7 @@ public class FindStudentDetails {
     public static void main (String[] args) throws SQLException, NoSuchRecordException, ClassNotFoundException {
         System.out.println("Student details should be printed here");
         String id = args[0];
+        System.out.println("check: " + id);
         Student student = StudentManager.readStudent(id);
 
         System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t");

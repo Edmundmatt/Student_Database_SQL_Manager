@@ -59,7 +59,6 @@ public class StudentManager {
                 student = new Student(id, results.getString("name"), results.getString("first_name"),
                         degree);
             }
-            System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" + degree.getName());
             return student;
         }catch(Exception e){
             System.err.println("Error: connectToDataBase()");

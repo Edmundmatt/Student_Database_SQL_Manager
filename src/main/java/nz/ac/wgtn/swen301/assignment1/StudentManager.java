@@ -45,6 +45,8 @@ public class StudentManager {
                 student = new Student(id, results.getString("name"), results.getString("first_name"),
                         degree);
             }
+            stmt.close();
+            results.close();
             return student;
         }catch(Exception e){
             System.err.println("Error: readStudent()");
@@ -76,6 +78,8 @@ public class StudentManager {
                 degree = new Degree(id, results.getString("name"));
             }
             if(degree == null) throw new NoSuchRecordException("Error: readDegree() - Degree null value");
+            stmt.close();
+            results.close();
             return degree;
         }catch(Exception e){
             System.err.println("Error: readDegree()");
@@ -126,18 +130,22 @@ public class StudentManager {
      * @return a freshly created student instance
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_createStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student createStudent(String name,String firstName,Degree degree) throws SQLException, ClassNotFoundException {
+    public static Student createStudent(String name,String firstName,Degree degree) throws SQLException, ClassNotFoundException, NoSuchRecordException {
         List<String> allIDs = (List<String>) getAllStudentIds();
-        if(allIDs.size() >= 10000){
+        int newIDint = -1;
+        String idCheck;
+        for(int i = 0; i < 9999; i++){
+            if(readStudent("id"+i) == null) newIDint = allIDs.size() + 1;
+        }
+        String newID = "id" + newIDint;
+        if(newIDint == -1){
             System.out.println("No space in database for new student");
             return null;
         }
-        int lastID = Integer.valueOf(allIDs.get(allIDs.size()-1).substring(2));
-        int newIDInt = lastID++;
-        String newID = "id" + newIDInt;
         Student student = new Student(newID, name, firstName, degree);
         String sqlStatement = "INSERT INTO STUDENTS "
-                + "VALUES (\'" + newID + "\', \'" + name + "\', \'" + firstName + "\', \"" + degree + "\')";
+                + "VALUES (\'" + newID + "\', \'" + firstName + "\', \'" + name + "\', \'" + degree.getId() + "\')";
+        System.out.println(sqlStatement);
         updateDataBase(sqlStatement);
         return student;
     }
@@ -200,9 +208,10 @@ public class StudentManager {
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sqlStatement);
+            conn.close();
         }catch(Exception e){
             System.err.println("Error: updateDataBase()");
-            e.printStackTrace();
+            e.printStackTrace(); 
         }
     }
 

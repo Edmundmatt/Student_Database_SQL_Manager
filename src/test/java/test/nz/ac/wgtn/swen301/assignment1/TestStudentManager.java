@@ -61,7 +61,12 @@ public class TestStudentManager {
     @Test
     public void test_createStudent2() throws Exception {
         //Assert once a student has been deleted a new student can be added to the database
-        //
+        StudentManager sM = new StudentManager();
+        Student student = sM.readStudent("id0");
+        sM.delete(student);
+        Degree degree = sM.readDegree("deg0");
+        Student s1 = sM.createStudent("Bunny", "Bugs",  degree);
+        assertTrue(sM.readStudent(s1.getId()).getFirstName().equals(s1.getFirstName()));
     }
 
     @Test
@@ -91,15 +96,6 @@ public class TestStudentManager {
         assertTrue(student1.equals(student2));
 
     }
-
-    @Test
-    public void test_update2() throws Exception {
-        //Update doesn't work inputting null values
-        //Does it need to?
-
-    }
-
-
 
     @Test
     public void testPerformance() throws Exception {

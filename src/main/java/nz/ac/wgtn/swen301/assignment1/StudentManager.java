@@ -30,19 +30,6 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student readStudent(String id) throws NoSuchRecordException,ClassNotFoundException, SQLException {
-
-//        ResultSet results = connectToDataBase("SELECT * FROM STUDENTS WHERE id=\'" + id + "\'");
-//        Student student = null;
-//        Degree degree = null;
-//        while (results.next()) {
-//            degree = new Degree();
-//            degree.setName(results.getString("degree"));
-//            student = new Student(id, results.getString("name"), results.getString("first_name"),
-//                    degree);
-//        }
-//        System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" + degree.getName());
-//        return student;
-
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             String url = "jdbc:derby:memory:studentdb";
@@ -52,16 +39,17 @@ public class StudentManager {
             stmt.setString(1, id);
             ResultSet results = stmt.executeQuery();
             Student student = null;
-            Degree degree = null;
             while (results.next()) {
-                degree = new Degree();
-                degree.setName(results.getString("degree"));
+//                Degree degree = new Degree(results.getString("degree"), );
+//                degree.setName(results.getString("degree"));
+                Degree degree = readDegree(results.getString("degree"));
+
                 student = new Student(id, results.getString("name"), results.getString("first_name"),
                         degree);
             }
             return student;
         }catch(Exception e){
-            System.err.println("Error: connectToDataBase()");
+            System.err.println("Error: readStudent()");
             e.printStackTrace();
             return null;
         }
@@ -78,7 +66,13 @@ public class StudentManager {
      */
     public static Degree readDegree(String id) throws NoSuchRecordException, SQLException, ClassNotFoundException {
         try {
-            ResultSet results = connectToDataBase("SELECT * FROM DEGREES WHERE id=\'" + id + "\'");
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            String url = "jdbc:derby:memory:studentdb";
+            Connection conn = DriverManager.getConnection(url);
+            String sql = "SELECT * FROM DEGREES WHERE id= ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet results = stmt.executeQuery();
             Degree degree = new Degree();
             while (results.next()) {
                 degree = new Degree(id, results.getString("name"));
@@ -179,13 +173,6 @@ public class StudentManager {
     }
 
     /**
-     * Custom method to be called by a test to test the performance of 1000 read requests.
-     */
-    public static void testingPerformance() throws SQLException, ClassNotFoundException{
-
-    }
-
-    /**
      * Returns ResultSet from the database given a an input String sqlStatement.
      * @param sqlStatement
      * @return
@@ -205,6 +192,8 @@ public class StudentManager {
             return null;
         }
     }
+
+
 
     private static void updateDataBase(String sqlStatement){
         try {

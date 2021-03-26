@@ -19,9 +19,24 @@
             </configuration>
         </plugin>
         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <addClasspath>true</addClasspath>
+                        <classpathPrefix>libs/</classpathPrefix>
+                        <mainClass>
+                            nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails
+                        </mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
+        <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
-            <version>2.1.5.RELEASE</version>
+            <version>2.4.4</version>
             <executions>
                 <execution>
                     <goals>
@@ -31,7 +46,7 @@
                         <includeSystemScope>true</includeSystemScope>
                         <classifier>spring-boot</classifier>
                         <mainClass>
-                            com.baeldung.executable.ExecutableMavenJar
+                            nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails
                         </mainClass>
                     </configuration>
                 </execution>

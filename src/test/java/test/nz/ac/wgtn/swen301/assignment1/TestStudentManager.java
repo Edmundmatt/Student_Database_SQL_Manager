@@ -67,13 +67,18 @@ public class TestStudentManager {
     @Test
     public void test_delete1() throws Exception {
         StudentManager sM = new StudentManager();
-//        Degree degree = new Degree("id0", "BSc Computer Science");
-//        Student student = new Student("id0", "Smith", "James", degree);
-//        sM.delete(student);
-//        assertNull(sM.readStudent(student.getId()));
         String id = "id0";
         sM.delete(sM.readStudent(id));
         assertNull(sM.readStudent(id));
+    }
+
+    @Test
+    public void test_delete2() throws Exception {
+        StudentManager sM = new StudentManager();
+        Degree degree = new Degree("id0", "BSc Computer Science");
+        Student student = new Student("id0", "Smith", "James", degree);
+        sM.delete(student);
+        assertNull(sM.readStudent(student.getId()));
     }
 
     @Test

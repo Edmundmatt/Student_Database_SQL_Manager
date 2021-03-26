@@ -23,6 +23,9 @@ public class FindStudentDetails {
         Student student = StudentManager.readStudent(id);
 
         System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" +student.getDegree().getName());
-
+        System.out.println("ID: " + student.getId());
+        System.out.println("Last Name: " + student.getName());
+        System.out.println("First Name: " + student.getFirstName());
+        System.out.println("Degree: " + student.getDegree().getName());
     }
 }

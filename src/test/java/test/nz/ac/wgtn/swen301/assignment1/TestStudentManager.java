@@ -7,6 +7,7 @@ import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -94,6 +95,21 @@ public class TestStudentManager {
         sM.update(student1);
         Student student2 = sM.readStudent("id0");
         assertTrue(student1.equals(student2));
+
+    }
+
+    @Test
+    public void test_getAllStudentIds() throws Exception {
+        StudentManager sM = new StudentManager();
+        int idsCount = sM.getAllStudentIds().size();
+        assertTrue(idsCount == 10000);
+    }
+
+    @Test
+    public void test_getAllDegreeIds() throws Exception {
+        StudentManager sM = new StudentManager();
+        List<String> ids = (List)sM.getAllDegreeIds();
+        assertTrue(ids.size() == 10);
 
     }
 

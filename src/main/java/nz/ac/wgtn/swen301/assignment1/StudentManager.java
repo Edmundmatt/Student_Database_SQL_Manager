@@ -156,7 +156,7 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllStudentIds (followed by optional numbers if multiple tests are used)
      */
     public static Collection<String> getAllStudentIds() throws SQLException, ClassNotFoundException {
-        List<String> studentIDs = new ArrayList<>(); //Change to an Iterable
+        List<String> studentIDs = new ArrayList<>();
         ResultSet results = connectToDataBase("SELECT id FROM STUDENTS");
         while(results.next()){
              studentIDs.add(results.getString("id"));

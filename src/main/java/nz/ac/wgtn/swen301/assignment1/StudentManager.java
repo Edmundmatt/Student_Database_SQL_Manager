@@ -145,7 +145,6 @@ public class StudentManager {
         Student student = new Student(newID, name, firstName, degree);
         String sqlStatement = "INSERT INTO STUDENTS "
                 + "VALUES (\'" + newID + "\', \'" + firstName + "\', \'" + name + "\', \'" + degree.getId() + "\')";
-        System.out.println(sqlStatement);
         updateDataBase(sqlStatement);
         return student;
     }

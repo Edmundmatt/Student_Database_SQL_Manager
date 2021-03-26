@@ -40,8 +40,6 @@ public class StudentManager {
             ResultSet results = stmt.executeQuery();
             Student student = null;
             while (results.next()) {
-//                Degree degree = new Degree(results.getString("degree"), );
-//                degree.setName(results.getString("degree"));
                 Degree degree = readDegree(results.getString("degree"));
 
                 student = new Student(id, results.getString("name"), results.getString("first_name"),

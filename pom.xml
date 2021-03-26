@@ -12,6 +12,7 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
             <configuration>
                 <source>1.8</source>
                 <target>1.8</target>
@@ -20,12 +21,14 @@
         <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>2.1.5.RELEASE</version>
             <executions>
                 <execution>
                     <goals>
                         <goal>repackage</goal>
                     </goals>
                     <configuration>
+                        <includeSystemScope>true</includeSystemScope>
                         <classifier>spring-boot</classifier>
                         <mainClass>
                             com.baeldung.executable.ExecutableMavenJar
@@ -50,6 +53,7 @@
       <artifactId>derby</artifactId>
       <version>10.14.2.0</version>
     </dependency>
+
 
       <!-- local dependency to setup database -->
       <dependency>

@@ -1,6 +1,7 @@
 package nz.ac.wgtn.swen301.assignment1.cli;
 
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
+import nz.ac.wgtn.swen301.studentdb.Degree;
 import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
 import nz.ac.wgtn.swen301.studentdb.Student;
 
@@ -21,7 +22,7 @@ public class FindStudentDetails {
         System.out.println("check: " + id);
         Student student = StudentManager.readStudent(id);
 
-        System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t");
+        System.out.println(student.getId() + "\t" + student.getName() + "\t" + student.getFirstName() + "\t" +student.getDegree().getName());
 
     }
 }
